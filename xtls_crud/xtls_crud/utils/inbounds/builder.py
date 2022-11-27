@@ -54,3 +54,36 @@ class SettingBuilder(Builder):
     def build(self) -> Setting:
         self.check()
         return Setting(clients=self._clients, disableInsecureEncryption=self._disable_insecure_encryption)
+
+
+class StreamSettingBuilder(Builder):
+    def __init__(self):
+        self._network = None
+        self._security = None
+        self._tls_settings = None
+        self._ws_settings = None
+
+    def with_network(self, network: str):
+        self._network = network
+        return self
+
+    def with_security(self, security: str):
+        self._security = security
+        return self
+
+    def with_tls_settings(self, tls_settings: TlsSettings):
+        self._tls_settings = tls_settings
+        return self
+
+    def with_ws_settings(self, ws_settings: WsSettings):
+        self._ws_settings = ws_settings
+        return self
+
+    def build(self) -> StreamSettings:
+        self.check()
+        return StreamSettings(
+            network=self._network,
+            security=self._security,
+            tlsSettings=self._tls_settings,
+            wsSettings=self._ws_settings,
+        )
