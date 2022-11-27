@@ -26,10 +26,10 @@ class Time(BaseModel):
         return values
 
     def __str__(self):
-        return f'{self.name} ({self.symbol})'
+        return f"Time('{self.name}', '{self.symbol}', {self.seconds})"
 
     def __repr__(self):
-        return f'{self.name} ({self.symbol})'
+        return f"Time('{self.name}', '{self.symbol}', {self.seconds})"
 
     def __eq__(self, other):
         if isinstance(other, Time):
@@ -238,6 +238,10 @@ class TimeUnit(Enum):
         return [unit.symbol for unit in cls]
 
     @classmethod
+    def all_seconds(cls) -> list[int]:
+        return [unit.seconds for unit in cls]
+
+    @classmethod
     def map_symbols_by_name(cls) -> dict[str, str]:
         _ = {}
         for name, symbol in zip(cls.all_names(), cls.all_symbols()):
@@ -249,4 +253,18 @@ class TimeUnit(Enum):
         _ = {}
         for name, symbol in zip(cls.all_names(), cls.all_symbols()):
             _[symbol] = name
+        return _
+
+    @classmethod
+    def map_seconds_by_name(cls) -> dict[str, int]:
+        _ = {}
+        for name, seconds in zip(cls.all_names(), cls.all_seconds()):
+            _[name] = seconds
+        return _
+
+    @classmethod
+    def map_seconds_by_symbol(cls) -> dict[str, int]:
+        _ = {}
+        for symbol, seconds in zip(cls.all_symbols(), cls.all_seconds()):
+            _[symbol] = seconds
         return _
