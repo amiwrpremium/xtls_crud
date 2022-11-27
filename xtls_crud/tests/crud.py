@@ -101,7 +101,7 @@ class Test(unittest.IsolatedAsyncioTestCase):
         ).with_user_id(
             1
         ).with_up(
-            1
+            '1GB'
         ).with_down(
             1
         ).with_total(
@@ -111,7 +111,7 @@ class Test(unittest.IsolatedAsyncioTestCase):
         ).with_enable(
             False
         ).with_expiry_time(
-            12313131
+            '1D'
         ).with_listen(
             ''
         ).with_port(
