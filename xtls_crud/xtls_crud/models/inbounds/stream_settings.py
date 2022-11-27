@@ -1,19 +1,20 @@
+from typing import List, Optional, Dict
 from pydantic import BaseModel, FilePath, validator
 
 
 class Certificate(BaseModel):
-    certificateFile: FilePath
-    keyFile: FilePath
+    certificateFile: Optional[FilePath] = "/root/cert.crt"
+    keyFile: Optional[FilePath] = "/root/private.key"
 
 
 class TlsSettings(BaseModel):
     serverName: str
-    certificates: list[Certificate]
+    certificates: List[Certificate]
 
 
 class WsSettings(BaseModel):
     path: str
-    headers: dict
+    headers: Optional[Dict[str, str]] = {}
 
     @validator('path')
     def path_must_start_with_slash(cls, v):

@@ -1,9 +1,10 @@
+from typing import List
 from pydantic import BaseModel
 
 
 class Sniffing(BaseModel):
     enabled: bool
-    destOverride: list[str]
+    destOverride: List[str]
 
 
 if __name__ == '__main__':

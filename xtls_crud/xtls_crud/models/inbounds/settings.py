@@ -1,14 +1,17 @@
+from uuid import uuid4
+from typing import Optional
+from typing import List
 from pydantic import BaseModel, UUID4
 
 
 class Client(BaseModel):
-    id: UUID4
-    alterId: int
+    id: Optional[UUID4] = uuid4()
+    alterId: Optional[int] = 0
 
 
 class Setting(BaseModel):
-    clients: list[Client]
-    disableInsecureEncryption: bool
+    clients: List[Client]
+    disableInsecureEncryption: Optional[bool] = False
 
 
 if __name__ == '__main__':
