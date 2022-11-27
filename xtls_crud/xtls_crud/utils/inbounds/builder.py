@@ -87,3 +87,96 @@ class StreamSettingBuilder(Builder):
             tlsSettings=self._tls_settings,
             wsSettings=self._ws_settings,
         )
+
+
+class InboundBuilder(Builder):
+    def __init__(self):
+        self._user_id = None
+        self._up = None
+        self._down = None
+        self._total = None
+        self._remark = None
+        self._enable = None
+        self._expiry_time = None
+        self._listen = None
+        self._port = None
+        self._protocol = None
+        self._settings = None
+        self._stream_settings = None
+        self._tag = None
+        self._sniffing = None
+
+    def with_user_id(self, user_id: int):
+        self._user_id = user_id
+        return self
+
+    def with_up(self, up: int):
+        self._up = up
+        return self
+
+    def with_down(self, down: int):
+        self._down = down
+        return self
+
+    def with_total(self, total: int):
+        self._total = total
+        return self
+
+    def with_remark(self, remark: str):
+        self._remark = remark
+        return self
+
+    def with_enable(self, enable: bool):
+        self._enable = enable
+        return self
+
+    def with_expiry_time(self, expiry_time: int):
+        self._expiry_time = expiry_time
+        return self
+
+    def with_listen(self, listen: str):
+        self._listen = listen
+        return self
+
+    def with_port(self, port: int):
+        self._port = port
+        return self
+
+    def with_protocol(self, protocol: str):
+        self._protocol = protocol
+        return self
+
+    def with_settings(self, settings: Setting):
+        self._settings = settings.json()
+        return self
+
+    def with_stream_settings(self, stream_settings: StreamSettings):
+        self._stream_settings = stream_settings.json()
+        return self
+
+    def with_tag(self, tag: str):
+        self._tag = tag
+        return self
+
+    def with_sniffing(self, sniffing: Sniffing):
+        self._sniffing = sniffing.json()
+        return self
+
+    def build(self) -> InboundsBase:
+        self.check()
+        return InboundsBase(
+            user_id=self._user_id,
+            up=self._up,
+            down=self._down,
+            total=self._total,
+            remark=self._remark,
+            enable=self._enable,
+            expiry_time=self._expiry_time,
+            listen=self._listen,
+            port=self._port,
+            protocol=self._protocol,
+            settings=self._settings,
+            stream_settings=self._stream_settings,
+            tag=self._tag,
+            sniffing=self._sniffing,
+        )
