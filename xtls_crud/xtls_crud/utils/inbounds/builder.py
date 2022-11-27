@@ -2,11 +2,16 @@ import typing as t
 from abc import ABC, abstractmethod
 import datetime
 
-from ...models.inbounds import Sniffing
-from ...models.inbounds import Client, Setting
-from ...models.inbounds import TlsSettings, WsSettings, StreamSettings
+from xtls_crud.xtls_crud.models.inbounds import Sniffing
+from xtls_crud.xtls_crud.models.inbounds import Client, Setting
+from xtls_crud.xtls_crud.models.inbounds import TlsSettings, WsSettings, StreamSettings
 
-from ...database.schemas import InboundsBase
+from xtls_crud.xtls_crud.database.schemas import InboundsBase
+
+from xtls_crud.xtls_crud.constants import time_info
+
+
+_ExpiryTime = t.Union[int, str, datetime.datetime, datetime.timedelta, time_info.Time, time_info.TimeUnit]
 
 
 class Builder(ABC):
@@ -130,15 +135,33 @@ class InboundBuilder(Builder):
         self._enable = enable
         return self
 
-    def with_expiry_time(self, expiry_time: t.Union[int, datetime.datetime, datetime.timedelta]):
+    def with_expiry_time(self, expiry_time: _ExpiryTime):
         if isinstance(expiry_time, datetime.datetime):
             expiry_time = expiry_time.timestamp()
         elif isinstance(expiry_time, datetime.timedelta):
             expiry_time = (datetime.datetime.now() + expiry_time).timestamp()
         elif isinstance(expiry_time, int):
             pass
+        elif isinstance(expiry_time, time_info.Time):
+            expiry_time = expiry_time.seconds
+        elif isinstance(expiry_time, time_info.TimeUnit):
+            expiry_time = expiry_time.seconds
+        elif isinstance(expiry_time, str):
+            try:
+                expiry_time = int(expiry_time)
+            except ValueError:
+                try:
+                    expiry_time = time_info.TimeUnit(expiry_time).seconds
+                except ValueError:
+                    try:
+                        expiry_time = time_info.from_string(expiry_time).seconds
+                    except ValueError:
+                        raise ValueError("expiry_time is not a valid time format")
         else:
-            raise TypeError("expiry_time must be datetime or int")
+            raise ValueError(
+                f"Invalid expiry_time: {expiry_time}\n"
+                f"Expected {_ExpiryTime} but got {type(expiry_time)}"
+            )
 
         self._expiry_time = expiry_time
         return self
