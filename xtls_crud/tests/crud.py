@@ -9,7 +9,6 @@ os.environ['DEBUG'] = 'True'
 os.environ['ENVIRONMENT'] = 'dev'
 
 
-
 def random_string(length):
     return ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for _ in range(length))
 
