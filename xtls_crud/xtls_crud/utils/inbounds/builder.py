@@ -70,7 +70,7 @@ class StreamSettingBuilder(Builder):
         self._tls_settings = None
         self._ws_settings = None
 
-    def with_network(self, network: str):
+    def with_network(self, network: t.Literal["ws", "tcp", "kcp", "quic", "http", "grpc"]):
         self._network = network
         return self
 
@@ -230,7 +230,9 @@ class InboundBuilder(Builder):
         self._port = port
         return self
 
-    def with_protocol(self, protocol: str):
+    def with_protocol(
+            self, protocol: t.Literal["vmess", "vless", "trojan", "socks", "http", "shadowsocks", "dokodemo-door"]
+    ):
         self._protocol = protocol
         return self
 
