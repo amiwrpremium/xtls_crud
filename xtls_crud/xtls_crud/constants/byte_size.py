@@ -237,6 +237,10 @@ class SizeUnit(Enum):
     @classmethod
     def all_symbols(cls) -> list[str]:
         return [unit.symbol for unit in cls]
+    
+    @classmethod
+    def all_bytes(cls) -> list[int]:
+        return [unit.bytes for unit in cls]
 
     @classmethod
     def map_symbols_by_name(cls) -> dict[str, str]:
@@ -251,3 +255,50 @@ class SizeUnit(Enum):
         for name, symbol in zip(cls.all_names(), cls.all_symbols()):
             _[symbol] = name
         return _
+    
+    @classmethod
+    def map_bytes_by_name(cls) -> dict[str, int]:
+        _ = {}
+        for name, bytes in zip(cls.all_names(), cls.all_bytes()):  # noqa
+            _[name] = bytes
+        return _
+
+    @classmethod
+    def map_bytes_by_symbol(cls) -> dict[str, int]:
+        _ = {}
+        for symbol, bytes in zip(cls.all_symbols(), cls.all_bytes()):  # noqa
+            _[symbol] = bytes
+        return _
+
+
+def from_string(string: str) -> Size:
+    """
+    Converts a string to a Size object.
+
+    example: 1d = 1 day | 1w = 1 week | 1mo = 1 month | 1y = 1 year
+    """
+
+    if not isinstance(string, str):
+        raise TypeError(f'Expected str, got {type(string)}')
+
+    if not string:
+        raise ValueError('Cannot convert empty string to Size')
+
+    string = string.upper()
+
+    digits = int(''.join(filter(str.isdigit, string)))
+    unit = ''.join(filter(str.isalpha, string))
+
+    if not digits:
+        raise ValueError('Cannot convert string to Size')
+
+    if not unit:
+        raise ValueError('Cannot convert string to Size')
+
+    if (unit not in SizeUnit.all_symbols()) and (unit not in SizeUnit.all_names()):
+        raise ValueError(f'Cannot convert string to Size: {unit=} | {SizeUnit.all_symbols()} | {SizeUnit.all_names()}')
+
+    symbol = SizeUnit.map_names_by_symbol()[unit]
+    bytes = SizeUnit.map_bytes_by_symbol()[unit]  # noqa
+
+    return Size(name=unit, symbol=symbol, bytes=bytes * digits)
