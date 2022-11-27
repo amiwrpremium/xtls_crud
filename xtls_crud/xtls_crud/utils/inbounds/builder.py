@@ -184,16 +184,18 @@ class InboundBuilder(Builder):
         return self
 
     def with_expiry_time(self, expiry_time: _ExpiryTime):
+        now = datetime.datetime.now()
+
         if isinstance(expiry_time, datetime.datetime):
             expiry_time = expiry_time.timestamp()
         elif isinstance(expiry_time, datetime.timedelta):
-            expiry_time = (datetime.datetime.now() + expiry_time).timestamp()
+            expiry_time = (now + expiry_time).timestamp()
         elif isinstance(expiry_time, int):
             pass
         elif isinstance(expiry_time, time_info.Time):
-            expiry_time = datetime.datetime.now().timestamp() + expiry_time.seconds
+            expiry_time = now.timestamp() + expiry_time.seconds
         elif isinstance(expiry_time, time_info.TimeUnit):
-            expiry_time = datetime.datetime.now().timestamp() + expiry_time.seconds
+            expiry_time = now.timestamp() + expiry_time.seconds
         elif isinstance(expiry_time, str):
             try:
                 expiry_time = int(expiry_time)
@@ -211,8 +213,11 @@ class InboundBuilder(Builder):
                 f"Expected {_ExpiryTime} but got {type(expiry_time)}"
             )
 
-        if expiry_time < datetime.datetime.now().timestamp():
-            raise ValueError("expiry_time must be in the future")
+        if expiry_time < now.timestamp():
+            expiry_time = expiry_time + now.timestamp()
+
+        if expiry_time < 10000000000:
+            expiry_time = expiry_time * 1000
 
         self._expiry_time = expiry_time
         return self
