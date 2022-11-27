@@ -36,3 +36,21 @@ class SniffingBuilder(Builder):
     def build(self) -> Sniffing:
         self.check()
         return Sniffing(destOverride=self._dest_override, enabled=self._enabled)
+
+
+class SettingBuilder(Builder):
+    def __init__(self):
+        self._clients = None
+        self._disable_insecure_encryption = None
+
+    def with_clients(self, clients: list[Client]):
+        self._clients = clients
+        return self
+
+    def with_disable_insecure_encryption(self, disable_insecure_encryption: bool):
+        self._disable_insecure_encryption = disable_insecure_encryption
+        return self
+
+    def build(self) -> Setting:
+        self.check()
+        return Setting(clients=self._clients, disableInsecureEncryption=self._disable_insecure_encryption)
