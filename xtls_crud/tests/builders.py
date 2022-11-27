@@ -1,4 +1,10 @@
 import unittest
+import os
+
+print(f"Setting up environment for {__name__}")
+os.environ['DEBUG'] = 'True'
+os.environ['ENVIRONMENT'] = 'dev'
+
 
 try:
     from xtls_crud.xtls_crud.models.inbounds import (

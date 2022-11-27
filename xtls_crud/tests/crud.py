@@ -2,6 +2,13 @@ import unittest
 from uuid import uuid4
 import random
 
+import os
+
+print(f"Setting up environment for {__name__}")
+os.environ['DEBUG'] = 'True'
+os.environ['ENVIRONMENT'] = 'dev'
+
+
 
 def random_string(length):
     return ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for _ in range(length))
