@@ -268,3 +268,36 @@ class TimeUnit(Enum):
         for symbol, seconds in zip(cls.all_symbols(), cls.all_seconds()):
             _[symbol] = seconds
         return _
+
+
+def from_string(string: str) -> Time:
+    """
+    Converts a string to a Time object.
+
+    example: 1d = 1 day | 1w = 1 week | 1mo = 1 month | 1y = 1 year
+    """
+
+    if not isinstance(string, str):
+        raise TypeError(f'Expected str, got {type(string)}')
+
+    if not string:
+        raise ValueError('Cannot convert empty string to Time')
+
+    string = string.upper()
+
+    digits = int(''.join(filter(str.isdigit, string)))
+    unit = ''.join(filter(str.isalpha, string))
+
+    if not digits:
+        raise ValueError('Cannot convert string to Time')
+
+    if not unit:
+        raise ValueError('Cannot convert string to Time')
+
+    if (unit not in TimeUnit.all_symbols()) and (unit not in TimeUnit.all_names()):
+        raise ValueError(f'Cannot convert string to Time: {unit=} | {TimeUnit.all_symbols()} | {TimeUnit.all_names()}')
+
+    symbol = TimeUnit.map_names_by_symbol()[unit]
+    seconds = TimeUnit.map_seconds_by_symbol()[unit]
+
+    return Time(name=unit, symbol=symbol, seconds=seconds * digits)
