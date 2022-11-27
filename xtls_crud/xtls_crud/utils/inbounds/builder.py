@@ -9,9 +9,11 @@ from xtls_crud.xtls_crud.models.inbounds import TlsSettings, WsSettings, StreamS
 from xtls_crud.xtls_crud.database.schemas import InboundsBase
 
 from xtls_crud.xtls_crud.constants import time_info
+from xtls_crud.xtls_crud.constants import byte_size
 
 
 _ExpiryTime = t.Union[int, str, datetime.datetime, datetime.timedelta, time_info.Time, time_info.TimeUnit]
+_ByteSize = t.Union[int, str, byte_size.Size, byte_size.SizeUnit]
 
 
 class Builder(ABC):
@@ -115,11 +117,57 @@ class InboundBuilder(Builder):
         self._user_id = user_id
         return self
 
-    def with_up(self, up: int):
+    def with_up(self, up: _ByteSize):
+        if isinstance(up, int):
+            pass
+        elif isinstance(up, str):
+            try:
+                up = int(up)
+            except ValueError:
+                try:
+                    up = byte_size.SizeUnit(up).bytes
+                except ValueError:
+                    try:
+                        up = byte_size.from_string(up).bytes
+                    except ValueError:
+                        raise ValueError("up is not a valid time format")
+        elif isinstance(up, byte_size.Size):
+            up = up.bytes
+        elif isinstance(up, byte_size.SizeUnit):
+            up = up.bytes
+        else:
+            raise ValueError(
+                f"Invalid up: {up}\n"
+                f"Expected {_ByteSize} but got {type(up)}"
+            )
+
         self._up = up
         return self
 
     def with_down(self, down: int):
+        if isinstance(down, int):
+            pass
+        elif isinstance(down, str):
+            try:
+                down = int(down)
+            except ValueError:
+                try:
+                    down = byte_size.SizeUnit(down).bytes
+                except ValueError:
+                    try:
+                        down = byte_size.from_string(down).bytes
+                    except ValueError:
+                        raise ValueError("up is not a valid time format")
+        elif isinstance(down, byte_size.Size):
+            down = down.bytes
+        elif isinstance(down, byte_size.SizeUnit):
+            down = down.bytes
+        else:
+            raise ValueError(
+                f"Invalid up: {down}\n"
+                f"Expected {_ByteSize} but got {type(down)}"
+            )
+
         self._down = down
         return self
 
