@@ -130,7 +130,16 @@ class InboundBuilder(Builder):
         self._enable = enable
         return self
 
-    def with_expiry_time(self, expiry_time: int):
+    def with_expiry_time(self, expiry_time: t.Union[int, datetime.datetime, datetime.timedelta]):
+        if isinstance(expiry_time, datetime.datetime):
+            expiry_time = expiry_time.timestamp()
+        elif isinstance(expiry_time, datetime.timedelta):
+            expiry_time = (datetime.datetime.now() + expiry_time).timestamp()
+        elif isinstance(expiry_time, int):
+            pass
+        else:
+            raise TypeError("expiry_time must be datetime or int")
+
         self._expiry_time = expiry_time
         return self
 
