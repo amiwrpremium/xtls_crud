@@ -7,7 +7,7 @@ from sqlalchemy.future import select
 from sqlalchemy import desc
 
 from ..db.base_class import Base
-from ..db.session import SessionLocal as _session
+from ..db.session import SessionLocal as _session  # noqa
 
 ModelType = TypeVar("ModelType", bound=Base)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)

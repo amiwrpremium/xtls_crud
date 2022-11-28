@@ -1,5 +1,5 @@
 # Import all the models, so that Base has them before being
 # imported by Alembic
 
-from ..db.base_class import Base
-from ..models.inbounds import Inbounds
+from ..db.base_class import Base  # noqa
+from ..models.inbounds import Inbounds  # noqa
