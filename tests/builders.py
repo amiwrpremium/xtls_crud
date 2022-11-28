@@ -13,7 +13,7 @@ try:
         WsSettings,
         Client
     )
-    from xtls_crud.xtls_crud.utils.inbounds.builder import (
+    from xtls_crud.xtls_crud.utils.builders.inbounds_builder import (
         InboundBuilder,
         SettingBuilder,
         StreamSettingBuilder,
@@ -32,7 +32,7 @@ except ModuleNotFoundError:
         WsSettings,
         Client
     )
-    from xtls_crud.xtls_crud.utils.inbounds.builder import (
+    from xtls_crud.xtls_crud.utils.builders.inbounds_builder import (
         InboundBuilder,
         SettingBuilder,
         StreamSettingBuilder,
@@ -44,7 +44,7 @@ class Test(unittest.TestCase):
     def test_setting_builder(self):
         setting_ = SettingBuilder(
         ).with_clients(
-            [Client(id="438be03a-035f-44f4-a564-b30ff95442e3", alterId=0)]
+            [Client(id="438be03a-035f-44f4-a564-b30ff95442e3", alterId=0)]  # type: ignore
         ).with_disable_insecure_encryption(
             False
         ).build()
@@ -59,7 +59,7 @@ class Test(unittest.TestCase):
             "tls"
         ).with_tls_settings(
             TlsSettings(serverName="definitely-not-illegal.tech", certificates=[
-                Certificate(certificateFile="/root/cert.crt", keyFile="/root/private.key")
+                Certificate(certificateFile="/root/cert.crt", keyFile="/root/private.key")  # type: ignore
             ])
         ).with_ws_settings(
             WsSettings(path="/sajsa2", headers={})
