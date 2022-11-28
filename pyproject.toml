@@ -17,6 +17,8 @@ slowapi = "^0.1.6"
 uvicorn = "^0.20.0"
 pydantic = {extras = ["email"], version = "^1.10.2"}
 python-multipart = "^0.0.5"
+alembic = "^1.8.1"
+typer = {extras = ["all"], version = "^0.7.0"}
 
 
 [build-system]
