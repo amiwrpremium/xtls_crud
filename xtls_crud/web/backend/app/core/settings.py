@@ -30,7 +30,8 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER: EmailStr = "amiwrpremium@gmail.com"
     FIRST_SUPERUSER_PASSWORD: str = "0024444103"
 
-    ADMIN_TOKEN: Optional[str]
+    ADMIN_TOKEN: Optional[str] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzAzNjc4NTAsInN1YiI6IjEifQ." \
+                                 "PI416k6bpJqV6NyNxg4Egjcg2I1BiAMSBIVwvd7WB1U"
 
     class Config:
         case_sensitive = True

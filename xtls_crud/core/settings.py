@@ -1,6 +1,6 @@
 import typing as t
 
-from pydantic import BaseSettings
+from pydantic import BaseSettings, HttpUrl
 from pathlib import Path
 
 
@@ -23,6 +23,8 @@ class Settings(BaseSettings):
         DATABASE_URL: str = '/etc/x-ui/x-ui.db'
 
     ASYNC_DB_URL: str = DATABASE_URL.replace('sqlite://', 'sqlite+aiosqlite://')
+
+    SITE_URL: HttpUrl = 'http://127.0.0.1/'
 
 
 settings = Settings()
