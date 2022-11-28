@@ -3,3 +3,4 @@
 
 
 from ..models.user import User  # noqa
+from .base_class import Base  # noqa
