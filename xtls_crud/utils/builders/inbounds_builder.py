@@ -3,14 +3,14 @@ from abc import ABC, abstractmethod
 import datetime
 from uuid import uuid4
 
-from xtls_crud.xtls_crud.models.inbounds import Sniffing
-from xtls_crud.xtls_crud.models.inbounds import Client, Setting
-from xtls_crud.xtls_crud.models.inbounds import TlsSettings, WsSettings, StreamSettings
+from ...models.inbounds import Sniffing
+from ...models.inbounds import Client, Setting
+from ...models.inbounds import TlsSettings, WsSettings, StreamSettings
 
-from xtls_crud.xtls_crud.database.schemas import InboundsBase
+from ...database.schemas import InboundsBase
 
-from xtls_crud.xtls_crud.constants import time_info
-from xtls_crud.xtls_crud.constants import byte_size
+from ...constants import time_info
+from ...constants import byte_size
 
 
 _ExpiryTime = t.Union[int, str, datetime.datetime, datetime.timedelta, time_info.Time, time_info.TimeUnit]

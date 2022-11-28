@@ -16,7 +16,7 @@ def random_string(length):
 try:
     from xtls_crud.xtls_crud.database import crud
     from xtls_crud.xtls_crud.database import schemas
-    from xtls_crud.xtls_crud.utils.inbounds.builder import (
+    from xtls_crud.xtls_crud.utils.builders.inbounds_builder import (
         InboundBuilder,
         SettingBuilder,
         StreamSettingBuilder,
@@ -36,7 +36,7 @@ except ModuleNotFoundError:
     sys.path.append(str(Path(__file__).parent.parent.parent))
     from xtls_crud.xtls_crud.database import crud
     from xtls_crud.xtls_crud.database import schemas
-    from xtls_crud.xtls_crud.utils.inbounds.builder import (
+    from xtls_crud.xtls_crud.utils.builders.inbounds_builder import (
         InboundBuilder,
         SettingBuilder,
         StreamSettingBuilder,
@@ -90,7 +90,7 @@ class Test(unittest.IsolatedAsyncioTestCase):
             "tls"
         ).with_tls_settings(
             TlsSettings(serverName="definitely-not-illegal.tech", certificates=[
-                Certificate(certificateFile="/root/cert.crt", keyFile="/root/private.key")
+                Certificate(certificateFile="/root/cert.crt", keyFile="/root/private.key")  # noqa
             ])
         ).with_ws_settings(
             WsSettings(path="/sajsa2", headers={})
