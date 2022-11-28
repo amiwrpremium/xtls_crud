@@ -1,10 +1,12 @@
 from typing import List
+from typing import Optional
+
 from pydantic import BaseModel
 
 
 class Sniffing(BaseModel):
     enabled: bool
-    destOverride: List[str]
+    destOverride: Optional[List[str]] = ["http", "tls"]
 
 
 if __name__ == '__main__':

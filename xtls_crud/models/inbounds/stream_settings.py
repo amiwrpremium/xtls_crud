@@ -9,7 +9,7 @@ class Certificate(BaseModel):
 
 class TlsSettings(BaseModel):
     serverName: str
-    certificates: List[Certificate]
+    certificates: Optional[List[Certificate]] = [Certificate()]
 
 
 class WsSettings(BaseModel):
