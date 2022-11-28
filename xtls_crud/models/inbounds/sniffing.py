@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 
 class Sniffing(BaseModel):
-    enabled: bool
+    enabled: Optional[bool] = True
     destOverride: Optional[List[str]] = ["http", "tls"]
 
 
