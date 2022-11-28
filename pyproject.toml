@@ -10,6 +10,11 @@ packages = [{include = "xtls_crud"}]
 python = "^3.10"
 aiosqlite = "^0.17.0"
 greenlet = "^2.0.1"
+nice-tools = "^0.0.5"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+slowapi = "^0.1.6"
+uvicorn = "^0.20.0"
 
 
 [build-system]
