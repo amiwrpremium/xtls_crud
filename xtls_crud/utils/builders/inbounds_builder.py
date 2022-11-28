@@ -16,6 +16,72 @@ _ExpiryTime = t.Union[int, str, datetime.datetime, datetime.timedelta, time_info
 _ByteSize = t.Union[int, str, byte_size.Size, byte_size.SizeUnit]
 
 
+def _convert_expiry_time(expiry_time: _ExpiryTime) -> int:
+    now = datetime.datetime.now()
+
+    if isinstance(expiry_time, datetime.datetime):
+        expiry_time = expiry_time.timestamp()
+    elif isinstance(expiry_time, datetime.timedelta):
+        expiry_time = (now + expiry_time).timestamp()
+    elif isinstance(expiry_time, int):
+        pass
+    elif isinstance(expiry_time, time_info.Time):
+        expiry_time = now.timestamp() + expiry_time.seconds
+    elif isinstance(expiry_time, time_info.TimeUnit):
+        expiry_time = now.timestamp() + expiry_time.seconds
+    elif isinstance(expiry_time, str):
+        try:
+            expiry_time = int(expiry_time)
+        except ValueError:
+            try:
+                expiry_time = time_info.TimeUnit(expiry_time).seconds
+            except ValueError:
+                try:
+                    expiry_time = time_info.from_string(expiry_time).seconds
+                except ValueError:
+                    raise ValueError("expiry_time is not a valid time format")
+    else:
+        raise ValueError(
+            f"Invalid expiry_time: {expiry_time}\n"
+            f"Expected {_ExpiryTime} but got {type(expiry_time)}"
+        )
+
+    if expiry_time < now.timestamp():
+        expiry_time = expiry_time + now.timestamp()
+
+    if expiry_time < 10000000000:
+        expiry_time = expiry_time * 1000
+
+    return expiry_time
+
+
+def _convert_size(size: _ByteSize) -> int:
+    if isinstance(size, int):
+        pass
+    elif isinstance(size, str):
+        try:
+            size = int(size)
+        except ValueError:
+            try:
+                size = byte_size.SizeUnit(size).bytes
+            except ValueError:
+                try:
+                    size = byte_size.from_string(size).bytes
+                except ValueError:
+                    raise ValueError("up is not a valid time format")
+    elif isinstance(size, byte_size.Size):
+        up = size.bytes
+    elif isinstance(size, byte_size.SizeUnit):
+        up = size.bytes
+    else:
+        raise ValueError(
+            f"Invalid up: {size}\n"
+            f"Expected {_ByteSize} but got {type(size)}"
+        )
+
+    return size
+
+
 class Builder(ABC):
     @abstractmethod
     def build(self):
@@ -118,57 +184,11 @@ class InboundBuilder(Builder):
         return self
 
     def with_up(self, up: _ByteSize):
-        if isinstance(up, int):
-            pass
-        elif isinstance(up, str):
-            try:
-                up = int(up)
-            except ValueError:
-                try:
-                    up = byte_size.SizeUnit(up).bytes
-                except ValueError:
-                    try:
-                        up = byte_size.from_string(up).bytes
-                    except ValueError:
-                        raise ValueError("up is not a valid time format")
-        elif isinstance(up, byte_size.Size):
-            up = up.bytes
-        elif isinstance(up, byte_size.SizeUnit):
-            up = up.bytes
-        else:
-            raise ValueError(
-                f"Invalid up: {up}\n"
-                f"Expected {_ByteSize} but got {type(up)}"
-            )
-
-        self._up = up
+        self._up = _convert_size(up)
         return self
 
-    def with_down(self, down: int):
-        if isinstance(down, int):
-            pass
-        elif isinstance(down, str):
-            try:
-                down = int(down)
-            except ValueError:
-                try:
-                    down = byte_size.SizeUnit(down).bytes
-                except ValueError:
-                    try:
-                        down = byte_size.from_string(down).bytes
-                    except ValueError:
-                        raise ValueError("up is not a valid time format")
-        elif isinstance(down, byte_size.Size):
-            down = down.bytes
-        elif isinstance(down, byte_size.SizeUnit):
-            down = down.bytes
-        else:
-            raise ValueError(
-                f"Invalid up: {down}\n"
-                f"Expected {_ByteSize} but got {type(down)}"
-            )
-
-        self._down = down
+    def with_down(self, down: _ByteSize):
+        self._down = _convert_size(down)
         return self
 
     def with_total(self, total: int):
@@ -184,42 +204,7 @@ class InboundBuilder(Builder):
         return self
 
     def with_expiry_time(self, expiry_time: _ExpiryTime):
-        now = datetime.datetime.now()
-
-        if isinstance(expiry_time, datetime.datetime):
-            expiry_time = expiry_time.timestamp()
-        elif isinstance(expiry_time, datetime.timedelta):
-            expiry_time = (now + expiry_time).timestamp()
-        elif isinstance(expiry_time, int):
-            pass
-        elif isinstance(expiry_time, time_info.Time):
-            expiry_time = now.timestamp() + expiry_time.seconds
-        elif isinstance(expiry_time, time_info.TimeUnit):
-            expiry_time = now.timestamp() + expiry_time.seconds
-        elif isinstance(expiry_time, str):
-            try:
-                expiry_time = int(expiry_time)
-            except ValueError:
-                try:
-                    expiry_time = time_info.TimeUnit(expiry_time).seconds
-                except ValueError:
-                    try:
-                        expiry_time = time_info.from_string(expiry_time).seconds
-                    except ValueError:
-                        raise ValueError("expiry_time is not a valid time format")
-        else:
-            raise ValueError(
-                f"Invalid expiry_time: {expiry_time}\n"
-                f"Expected {_ExpiryTime} but got {type(expiry_time)}"
-            )
-
-        if expiry_time < now.timestamp():
-            expiry_time = expiry_time + now.timestamp()
-
-        if expiry_time < 10000000000:
-            expiry_time = expiry_time * 1000
-
-        self._expiry_time = expiry_time
+        self._expiry_time = _convert_expiry_time(expiry_time)
         return self
 
     def with_listen(self, listen: str):
