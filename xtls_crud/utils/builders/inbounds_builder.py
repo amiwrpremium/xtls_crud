@@ -1,6 +1,7 @@
 import typing as t
 from abc import ABC, abstractmethod
 import datetime
+from uuid import uuid4
 
 from xtls_crud.xtls_crud.models.inbounds import Sniffing
 from xtls_crud.xtls_crud.models.inbounds import Client, Setting
@@ -70,9 +71,9 @@ def _convert_size(size: _ByteSize) -> int:
                 except ValueError:
                     raise ValueError("up is not a valid time format")
     elif isinstance(size, byte_size.Size):
-        up = size.bytes
+        size = size.bytes
     elif isinstance(size, byte_size.SizeUnit):
-        up = size.bytes
+        size = size.bytes
     else:
         raise ValueError(
             f"Invalid up: {size}\n"
@@ -254,4 +255,120 @@ class InboundBuilder(Builder):
             stream_settings=self._stream_settings,
             tag=self._tag,
             sniffing=self._sniffing,
+        )
+
+
+class EasyInboundBuilder(Builder):
+    def __init__(self):
+        self._user_id = None
+        self._up = None
+        self._down = None
+        self._total = None
+        self._remark = None
+        self._enable = None
+        self._expiry_time = None
+        self._listen = None
+        self._port = None
+        self._protocol = None
+        self._settings = None
+        self._network = None
+        self._security = None
+        self._server_name = None
+        self._ws_path = None
+        self._tag = None
+        self._sniffing = None
+
+    def with_user_id(self, user_id: int):
+        self._user_id = user_id
+        return self
+
+    def with_up(self, up: _ByteSize):
+        self._up = _convert_size(up)
+        return self
+
+    def with_down(self, down: _ByteSize):
+        self._down = _convert_size(down)
+        return self
+
+    def with_total(self, total: int):
+        self._total = total
+        return self
+
+    def with_remark(self, remark: str):
+        self._remark = remark
+        return self
+
+    def with_enable(self, enable: bool):
+        self._enable = enable
+        return self
+
+    def with_expiry_time(self, expiry_time: _ExpiryTime):
+        self._expiry_time = _convert_expiry_time(expiry_time)
+        return self
+
+    def with_listen(self, listen: str):
+        self._listen = listen
+        return self
+
+    def with_port(self, port: int):
+        self._port = port
+        return self
+
+    def with_protocol(
+            self, protocol: t.Literal["vmess", "vless", "trojan", "socks", "http", "shadowsocks", "dokodemo-door"]
+    ):
+        self._protocol = protocol
+        return self
+
+    def with_uuid(self, uuid: t.Union[str, uuid4] = uuid4()):
+        _client = Client(id=uuid)
+        self._settings = Setting(clients=[_client]).json()
+        return self
+
+    def with_network(self, network: t.Literal["ws", "tcp", "kcp", "quic", "http", "grpc"]):
+        self._network = network
+        return self
+
+    def with_security(self, security: str):
+        self._security = security
+        return self
+
+    def with_server_name(self, server_name: str):
+        self._server_name = server_name
+        return self
+
+    def with_ws_path(self, ws_path: str):
+        self._ws_path = ws_path
+        return self
+
+    def with_tag(self, tag: str):
+        self._tag = tag
+        return self
+
+    def with_sniffing(self, sniffing: bool):
+        self._sniffing = sniffing
+        return self
+
+    def build(self) -> InboundsBase:
+        self.check()
+        return InboundsBase(
+            user_id=self._user_id,
+            up=self._up,
+            down=self._down,
+            total=self._total,
+            remark=self._remark,
+            enable=self._enable,
+            expiry_time=self._expiry_time,
+            listen=self._listen,
+            port=self._port,
+            protocol=self._protocol,
+            settings=self._settings,
+            stream_settings=StreamSettings(
+                network=self._network,
+                security=self._security,
+                tlsSettings=TlsSettings(serverName=self._server_name),
+                wsSettings=WsSettings(path=self._ws_path),
+            ).json(),
+            tag=self._tag,
+            sniffing=Sniffing(enabled=self._sniffing).json(),
         )
