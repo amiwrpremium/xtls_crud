@@ -56,8 +56,12 @@ async def add_content_length(request: Request, call_next, *args, **kwargs):
     return _response
 
 
-def main():
-    uvicorn.run("main:app", host=settings.SERVER_HOST, port=settings.SERVER_PORT)
+def main(host: str = None, port: int = None, reload: bool = False, log_level: str = None):
+    host = host or settings.SERVER_HOST
+    port = port or settings.SERVER_PORT
+    reload = reload
+    log_level = log_level
+    uvicorn.run("xtls_crud:web_app", host=host, port=port, reload=reload, log_level=log_level)
 
 
 if __name__ == "__main__":
