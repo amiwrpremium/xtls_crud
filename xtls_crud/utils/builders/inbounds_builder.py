@@ -12,7 +12,6 @@ from ...database.schemas import InboundsBase
 from ...constants import time_info
 from ...constants import byte_size
 
-
 _ExpiryTime = t.Union[int, str, datetime.datetime, datetime.timedelta, time_info.Time, time_info.TimeUnit]
 _ByteSize = t.Union[int, str, byte_size.Size, byte_size.SizeUnit]
 
