@@ -1,4 +1,4 @@
-from typing import Union, List
+from typing import Union, List, Optional
 from pathlib import Path
 import secrets
 
@@ -24,12 +24,13 @@ class Settings(BaseSettings):
     POSTGRES_PASSWORD: str = "0024444103"
     POSTGRES_DB: str = "inj_test"
 
-    SQLITE_DATABASE_URL: str = f'sqlite:///{str(Path(__file__).parent)}/web.db'
+    BACKEND_DATABASE_URL: str = f'sqlite:///{str(Path(__file__).parent)}/web.db'
+    ASYNC_BACKEND_DATABASE_URL: str = BACKEND_DATABASE_URL.replace('sqlite://', 'sqlite+aiosqlite://')
 
     FIRST_SUPERUSER: EmailStr = "amiwrpremium@gmail.com"
     FIRST_SUPERUSER_PASSWORD: str = "0024444103"
 
-    ADMIN_TOKEN: str
+    ADMIN_TOKEN: Optional[str]
 
     class Config:
         case_sensitive = True
