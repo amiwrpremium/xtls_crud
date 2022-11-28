@@ -6,6 +6,9 @@ authors = ["amiwrpremium <amiwrpremium@gmail.com>"]
 readme = "README.md"
 packages = [{include = "xtls_crud"}]
 
+[tool.poetry.scripts]
+reyes = "xtls_crud.commands.main:app"
+
 [tool.poetry.dependencies]
 python = "^3.10"
 aiosqlite = "^0.17.0"
@@ -19,6 +22,7 @@ pydantic = {extras = ["email"], version = "^1.10.2"}
 python-multipart = "^0.0.5"
 alembic = "^1.8.1"
 typer = {extras = ["all"], version = "^0.7.0"}
+fastapi = "^0.88.0"
 
 
 [build-system]
