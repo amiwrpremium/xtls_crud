@@ -30,15 +30,21 @@ class PrettyInbound(BaseModel):
 
     @validator('settings', pre=True)
     def validate_settings(cls, v):
-        return Setting(**json.loads(v))
+        if isinstance(v, str):
+            v = json.loads(v)
+        return Setting(**v)
 
     @validator('stream_settings', pre=True)
     def validate_stream_settings(cls, v):
-        return StreamSettings(**json.loads(v))
+        if isinstance(v, str):
+            v = json.loads(v)
+        return StreamSettings(**v)
 
     @validator('sniffing', pre=True)
     def validate_sniffing(cls, v):
-        return Sniffing(**json.loads(v))
+        if isinstance(v, str):
+            v = json.loads(v)
+        return Sniffing(**v)
 
 
 if __name__ == '__main__':
