@@ -30,8 +30,6 @@ def custom_openapi():
     )
     # setting new logo to docs
 
-    print(inbound__get.samples)
-
     openapi_schema["paths"][inbound__get.path][
         inbound__get.method]["x-codeSamples"] = inbound__get.samples_dict_list
     openapi_schema["paths"][builders__post.path][
