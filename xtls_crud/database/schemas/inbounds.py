@@ -19,6 +19,14 @@ class InboundsBase(BaseModel):
     sniffing: str
 
 
+class InboundsOrderGetFilter(BaseModel):
+    user_id: t.Optional[int] = None
+    enable: t.Optional[bool] = None
+    port: t.Optional[int] = None
+    protocol: t.Optional[str] = None
+    tag: t.Optional[str] = None
+
+
 class InboundsCreate(InboundsBase):
     pass
 
