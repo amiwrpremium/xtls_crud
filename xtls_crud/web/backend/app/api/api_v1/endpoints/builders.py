@@ -9,7 +9,7 @@ from .......utils.builders.inbounds_builder import (
     EasyInboundBuilder
 )
 from .......models.inbounds.easy_inbounds_builder import (
-    EasyBuilderSchema
+    EasyBuilderSchemaCreate
 )
 
 router = APIRouter()
@@ -19,7 +19,7 @@ router = APIRouter()
 @deps.limiter.limit('10/minute', per_method=True)
 async def client_creator(
         *,
-        obj_in: EasyBuilderSchema,
+        obj_in: EasyBuilderSchemaCreate,
         request: Request,
         current_user: models.User = Depends(deps.get_current_active_user),
 ) -> t.Any:

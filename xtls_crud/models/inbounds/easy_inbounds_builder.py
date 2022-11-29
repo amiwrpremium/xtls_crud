@@ -26,7 +26,7 @@ def _random_path(length: int) -> str:
     return '/' + "".join([ascii_letters[int(random() * len(ascii_letters))] for _ in range(length)])
 
 
-class EasyBuilderSchema(BaseModel):
+class EasyBuilderSchemaCreate(BaseModel):
     user_id: t.Optional[int] = 1
     up: t.Optional[_ByteSize] = Field(
         100 * byte_size.GIGABYTE.bytes, title="Upload", gt=0, multiple_of=1,
