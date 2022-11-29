@@ -57,8 +57,6 @@ class RouteLoggerMiddleware(BaseHTTPMiddleware):
 
         # data = await self._collect_data(request)
 
-        # print(data)
-
         self._logger.info(
             self._generate_success_log(request, response, took)
         )
