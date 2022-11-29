@@ -1,10 +1,10 @@
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Union
 from pydantic import BaseModel, FilePath, validator
 
 
 class Certificate(BaseModel):
-    certificateFile: Optional[FilePath] = "/root/cert.crt"
-    keyFile: Optional[FilePath] = "/root/private.key"
+    certificateFile: Optional[Union[FilePath, str]] = "/root/cert.crt"
+    keyFile: Optional[Union[FilePath, str]] = "/root/private.key"
 
 
 class TlsSettings(BaseModel):

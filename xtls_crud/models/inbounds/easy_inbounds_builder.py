@@ -1,6 +1,6 @@
 import typing as t
 from uuid import uuid4
-from pydantic import BaseModel, UUID4, Field, HttpUrl
+from pydantic import BaseModel, UUID4, UUID1, Field, HttpUrl
 from random import random
 from string import ascii_letters
 
@@ -53,7 +53,7 @@ class EasyBuilderSchema(BaseModel):
     protocol: t.Optional[ProtocolsType] = Field(
         "vmess", title="Protocol",
         example="vmess", description="Protocol")
-    uuid: t.Optional[UUID4] = Field(
+    uuid: t.Optional[t.Union[UUID4, UUID1]] = Field(
         uuid4(), title="UUID",
         example=uuid4(), description="UUID")
     network: t.Optional[NetworksType] = Field(

@@ -1,11 +1,12 @@
 from uuid import uuid4
 from typing import Optional
 from typing import List
-from pydantic import BaseModel, UUID4
+from typing import Union
+from pydantic import BaseModel, UUID4, UUID1
 
 
 class Client(BaseModel):
-    id: Optional[UUID4] = uuid4()
+    id: Optional[Union[UUID4, UUID1]] = uuid4()
     alterId: Optional[int] = 0
 
 
