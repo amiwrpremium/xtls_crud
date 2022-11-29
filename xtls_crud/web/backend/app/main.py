@@ -3,17 +3,47 @@ import time
 import uvicorn
 
 from fastapi import FastAPI, Request
+from fastapi.openapi.utils import get_openapi
 from starlette.concurrency import iterate_in_threadpool
 from starlette.middleware.cors import CORSMiddleware
 
 from .api.api_v1.api import api_router
 from .core.settings import settings
+from .open_api.code_samples.samples import inbound__get, builders__post
+
 
 app = FastAPI(
     title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
 
-# Set all CORS enabled origins
+
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+
+    # custom settings
+    openapi_schema = get_openapi(
+        title="Xtls Crud",
+        version="0.1.0",
+        description="Xtls Crud",
+        routes=app.routes,
+    )
+    # setting new logo to docs
+
+    print(inbound__get.samples)
+
+    openapi_schema["paths"][inbound__get.path][
+        inbound__get.method]["x-codeSamples"] = inbound__get.samples_dict_list
+    openapi_schema["paths"][builders__post.path][
+        builders__post.method]["x-codeSamples"] = builders__post.samples_dict_list
+
+    app.openapi_schema = openapi_schema
+
+    return app.openapi_schema
+
+
+app.openapi = custom_openapi
+
 if settings.BACKEND_CORS_ORIGINS:
     app.add_middleware(
         CORSMiddleware,
