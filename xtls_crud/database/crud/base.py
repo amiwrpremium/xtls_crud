@@ -37,7 +37,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             if v:
                 where.append(getattr(self.model, k) == v)
 
-        query = select(self.model).where(*where).order_by(desc(self.model.timestamp)).offset(skip).limit(limit)
+        query = select(self.model).where(*where).offset(skip).limit(limit)
 
         _ = await self.session.execute(query)
         return _.scalars().all()
