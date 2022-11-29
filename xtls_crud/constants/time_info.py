@@ -1,3 +1,10 @@
+"""
+Time Constants, Types and Enums for xtls_crud
+
+This module contains constants, types and enums for byte sizes.
+Like: 1d = 1 day | 1w = 1 week | 1mo = 1 month | 1y = 1 year
+"""
+
 from enum import Enum
 
 from pydantic import BaseModel
@@ -5,22 +12,56 @@ from pydantic import root_validator
 
 
 class Time(BaseModel):
+    """
+    Time Model
+    """
+
     name: str
     symbol: str
     seconds: int
 
     @root_validator()
     def upper_case_name(cls, values):
+        """
+        Make sure the name is upper case
+
+        :param values: dict
+        :type values: dict
+
+        :return: dict
+        :rtype: dict
+        """
+
         values['name'] = values['name'].upper()
         return values
 
     @root_validator()
     def upper_case_symbol(cls, values):
+        """
+        Make sure the symbol is upper case
+
+        :param values: dict
+        :type values: dict
+
+        :return: dict
+        :rtype: dict
+        """
+
         values['symbol'] = values['symbol'].upper()
         return values
 
     @root_validator()
     def positive_seconds(cls, values):
+        """
+        Make sure the seconds are positive
+
+        :param values: dict
+        :type values: dict
+
+        :return: dict
+        :rtype: dict
+        """
+
         if values['seconds'] < 0:
             raise ValueError('seconds must be positive')
         return values
@@ -209,6 +250,10 @@ YEAR = Time(name='year', symbol='y', seconds=31556952)
 
 
 class TimeUnit(Enum):
+    """
+    Enum for time units
+    """
+
     SECOND = SECOND
     MINUTE = MINUTE
     HOUR = HOUR
@@ -219,62 +264,126 @@ class TimeUnit(Enum):
 
     @property
     def name(self) -> str:
+        """
+        Get the name of the time unit
+
+        :return: The name of the time unit
+        :rtype: str
+        """
+
         return self.value.name
 
     @property
     def symbol(self) -> str:
+        """
+        Get the symbol of the time unit
+
+        :return: The symbol of the time unit
+        :rtype: str
+        """
+
         return self.value.symbol
 
     @property
     def seconds(self) -> int:
+        """
+        Get the number of seconds in the time unit
+
+        :return: The number of seconds in the time unit
+        :rtype: int
+        """
+
         return self.value.seconds
 
     @classmethod
     def all_names(cls) -> list[str]:
+        """
+        Get all the names of the time units
+
+        :return: All the names of the time units
+        :rtype: list[str]
+        """
+
         return [unit.name for unit in cls]
 
     @classmethod
     def all_symbols(cls) -> list[str]:
+        """
+        Get all the symbols of the time units
+
+        :return: All the symbols of the time units
+        :rtype: list[str]
+        """
+
         return [unit.symbol for unit in cls]
 
     @classmethod
     def all_seconds(cls) -> list[int]:
+        """
+        Get all the number of seconds in the time units
+
+        :return: All the number of seconds in the time units
+        :rtype: list[int]
+        """
+
         return [unit.seconds for unit in cls]
 
     @classmethod
     def map_symbols_by_name(cls) -> dict[str, str]:
-        _ = {}
-        for name, symbol in zip(cls.all_names(), cls.all_symbols()):
-            _[name] = symbol
-        return _
+        """
+        Map the symbols of the time units by their names
+
+        :return: A dictionary mapping the symbols of the time units by their names
+        :rtype: dict[str, str]
+        """
+
+        return {name: symbol for name, symbol in zip(cls.all_names(), cls.all_symbols())}
 
     @classmethod
     def map_names_by_symbol(cls) -> dict[str, str]:
-        _ = {}
-        for name, symbol in zip(cls.all_names(), cls.all_symbols()):
-            _[symbol] = name
-        return _
+        """
+        Map the names of the time units by their symbols
+
+        :return: A dictionary mapping the names of the time units by their symbols
+        :rtype: dict[str, str]
+        """
+
+        return {symbol: name for name, symbol in zip(cls.all_names(), cls.all_symbols())}
 
     @classmethod
     def map_seconds_by_name(cls) -> dict[str, int]:
-        _ = {}
-        for name, seconds in zip(cls.all_names(), cls.all_seconds()):
-            _[name] = seconds
-        return _
+        """
+        Map the number of seconds in the time units by their names
+
+        :return: A dictionary mapping the number of seconds in the time units by their names
+        :rtype: dict[str, int]
+        """
+
+        return {name: seconds for name, seconds in zip(cls.all_names(), cls.all_seconds())}
 
     @classmethod
     def map_seconds_by_symbol(cls) -> dict[str, int]:
-        _ = {}
-        for symbol, seconds in zip(cls.all_symbols(), cls.all_seconds()):
-            _[symbol] = seconds
-        return _
+        """
+        Map the number of seconds in the time units by their symbols
+
+        :return: A dictionary mapping the number of seconds in the time units by their symbols
+        :rtype: dict[str, int]
+        """
+
+        return {symbol: seconds for symbol, seconds in zip(cls.all_symbols(), cls.all_seconds())}
 
 
 def from_string(string: str) -> Time:
     """
-    Converts a string to a Time object.
+    Create a time from a string
 
-    example: 1d = 1 day | 1w = 1 week | 1mo = 1 month | 1y = 1 year
+    :param string: The string to create the time from
+    :type string: str
+
+    :return: The size (e.g. 1D)
+    :rtype: Size
+
+    :raises ValueError: If the string is not a valid time
     """
 
     if not isinstance(string, str):

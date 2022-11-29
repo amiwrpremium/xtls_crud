@@ -1,24 +1,66 @@
+"""
+ByteSize Constants, Types and Enums for xtls_crud
+
+This module contains constants, types and enums for byte sizes.
+Like: 1GB = 1 Gigabyte | 1TB = 1 Terabyte | 1PB = 1 Petabyte | 1EB = 1 Exabyte
+"""
+
+from enum import Enum
 from pydantic import BaseModel
 from pydantic import root_validator
 
 
 class Size(BaseModel):
+    """
+    Size Model
+    """
+
     name: str
     symbol: str
     bytes: int
 
     @root_validator()
     def upper_case_name(cls, values):
+        """
+        Upper case the name
+
+        :param values: values from the model
+        :type values: dict
+
+        :return: values
+        :rtype: dict
+        """
+
         values['name'] = values['name'].upper()
         return values
 
     @root_validator()
     def upper_case_symbol(cls, values):
+        """
+        Upper case the symbol
+
+        :param values: values from the model
+        :type values: dict
+
+        :return: values
+        :rtype: dict
+        """
+
         values['symbol'] = values['symbol'].upper()
         return values
 
     @root_validator()
     def positive_bytes(cls, values):
+        """
+        Validate that bytes is positive
+
+        :param values: values from the model
+        :type values: dict
+
+        :return: values
+        :rtype: dict
+        """
+
         if values['bytes'] < 0:
             raise ValueError('bytes must be positive')
         return values
@@ -206,10 +248,11 @@ PETABYTE = Size(name='petabyte', symbol='PB', bytes=1125899906842624)
 EXABYTE = Size(name='exabyte', symbol='EB', bytes=1152921504606846976)
 
 
-from enum import Enum
-
-
 class SizeUnit(Enum):
+    """
+    Enum for size units
+    """
+
     BYTE = BYTE
     KILOBYTE = KILOBYTE
     MEGABYTE = MEGABYTE
@@ -220,62 +263,126 @@ class SizeUnit(Enum):
 
     @property
     def name(self) -> str:
+        """
+        Get the name of the unit
+
+        :return: The name of the unit
+        :rtype: str
+        """
+
         return self.value.name
 
     @property
     def symbol(self) -> str:
+        """
+        Get the symbol of the unit
+
+        :return: The symbol of the unit
+        :rtype: str
+        """
+
         return self.value.symbol
 
     @property
     def bytes(self) -> int:
+        """
+        Get the number of bytes in the unit
+
+        :return: The number of bytes in the unit
+        :rtype: int
+        """
+
         return self.value.bytes
 
     @classmethod
     def all_names(cls) -> list[str]:
+        """
+        Get all the names of the units
+
+        :return: All the names of the units
+        :rtype: list[str]
+        """
+
         return [unit.name for unit in cls]
 
     @classmethod
     def all_symbols(cls) -> list[str]:
+        """
+        Get all the symbols of the units
+
+        :return: All the symbols of the units
+        :rtype: list[str]
+        """
+
         return [unit.symbol for unit in cls]
-    
+
     @classmethod
     def all_bytes(cls) -> list[int]:
+        """
+        Get all the number of bytes in the units
+
+        :return: All the number of bytes in the units
+        :rtype: list[int]
+        """
+
         return [unit.bytes for unit in cls]
 
     @classmethod
     def map_symbols_by_name(cls) -> dict[str, str]:
-        _ = {}
-        for name, symbol in zip(cls.all_names(), cls.all_symbols()):
-            _[name] = symbol
-        return _
+        """
+        Map the symbols of the units by their names
+
+        :return: A dictionary mapping the symbols of the units by their names
+        :rtype: dict[str, str]
+        """
+
+        return {name: symbol for name, symbol in zip(cls.all_names(), cls.all_symbols())}
 
     @classmethod
     def map_names_by_symbol(cls) -> dict[str, str]:
-        _ = {}
-        for name, symbol in zip(cls.all_names(), cls.all_symbols()):
-            _[symbol] = name
-        return _
-    
+        """
+        Map the names of the units by their symbols
+
+        :return: A dictionary mapping the names of the units by their symbols
+        :rtype: dict[str, str]
+        """
+
+        return {symbol: name for name, symbol in zip(cls.all_names(), cls.all_symbols())}
+
     @classmethod
     def map_bytes_by_name(cls) -> dict[str, int]:
-        _ = {}
-        for name, bytes in zip(cls.all_names(), cls.all_bytes()):  # noqa
-            _[name] = bytes
-        return _
+        """
+        Map the number of bytes in the units by their names
+
+        :return: A dictionary mapping the number of bytes in the units by their names
+        :rtype: dict[str, int]
+        """
+
+        return {name: bytes for name, bytes in zip(cls.all_names(), cls.all_bytes())}  # noqa
 
     @classmethod
     def map_bytes_by_symbol(cls) -> dict[str, int]:
-        _ = {}
-        for symbol, bytes in zip(cls.all_symbols(), cls.all_bytes()):  # noqa
-            _[symbol] = bytes
-        return _
+        """
+        Map the number of bytes in the units by their symbols
+
+        :return: A dictionary mapping the number of bytes in the units by their symbols
+        :rtype: dict[str, int]
+        """
+
+        return {symbol: bytes for symbol, bytes in zip(cls.all_symbols(), cls.all_bytes())}  # noqa
 
 
 def from_string(string: str) -> Size:
     """
-    Converts a string to a Size object.
+    Create a size from a string
 
-    example: 1d = 1 day | 1w = 1 week | 1mo = 1 month | 1y = 1 year
+    :param string: The string to create the size from
+    :type string: str
+
+    :return: The size (e.g. 100 MB)
+    :rtype: Size
+
+    :raises ValueError: If the string is not a valid size
     """
 
     if not isinstance(string, str):
