@@ -73,3 +73,52 @@ class EasyBuilderSchemaCreate(BaseModel):
         example=1, description="Tag")
     sniffing: t.Optional[bool] = Field(
         True, title="Sniffing", example=True, description="Sniffing")
+
+
+class EasyBuilderSchemaUpdate(BaseModel):
+    user_id: t.Optional[int] = 1
+    up: t.Optional[_ByteSize] = Field(
+        None, title="Upload", gt=0, multiple_of=1,
+        example="100GB", description="Upload (Byte) Default: 100GB")
+    down: t.Optional[_ByteSize] = Field(
+        None, title="Download", gt=0, multiple_of=1,
+        example=100 * byte_size.GIGABYTE.bytes, description="Download (Byte) Default: 100GB")
+    total: t.Optional[int] = Field(
+        None, title="Total", example=0, description="Total", ge=0, multiple_of=1)
+    remark: t.Optional[str] = Field(
+        None, title="Remark", max_length=255, min_length=1, strip_whitespace=True, regex=r'^[\w\-\s]+$',
+        example="amiwrpremium", description="Name of this setting")
+    enable: t.Optional[bool] = Field(
+        True, title="Enable", example=True, description="Enable this setting")
+    expiry_time: t.Optional[_ExpiryTime] = Field(
+        None, title="Expiry Time", gt=0, multiple_of=1,
+        example="1MO", description="Expiry Time (MILLISECONDS) Default: Never")
+    listen: str = Field(
+        None, title="Listen", max_length=255, min_length=1, strip_whitespace=True, regex=r'^[\w\-\s]+$',
+        example="", description="Listen")
+    port: int = Field(
+        None, title="Port", gt=0, multiple_of=1, le=65535,
+        example=443, description="Port to bind")
+    protocol: t.Optional[ProtocolsType] = Field(
+        None, title="Protocol",
+        example="vmess", description="Protocol")
+    uuid: t.Optional[t.Union[UUID4, UUID1]] = Field(
+        None, title="UUID",
+        example=uuid4(), description="UUID")
+    network: t.Optional[NetworksType] = Field(
+        None, title="Network",
+        example="ws", description="Network")
+    security: t.Optional[str] = Field(
+        None, title="Security",
+        example="tls", description="Security")
+    server_name: HttpUrl = Field(
+        None, title="Server Name", strip_whitespace=True,
+        example=settings.SITE_URL, description="Server Name")
+    ws_path: t.Optional[str] = Field(
+        None, title="WS Path", max_length=7, min_length=7, strip_whitespace=True,
+        example=_random_path(6), description="WebSocket Path")
+    tag: int = Field(
+        None, title="Tag", gt=0, multiple_of=1,
+        example=1, description="Tag")
+    sniffing: t.Optional[bool] = Field(
+        None, title="Sniffing", example=True, description="Sniffing")
