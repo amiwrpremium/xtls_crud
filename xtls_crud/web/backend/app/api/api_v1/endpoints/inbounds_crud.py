@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, Request, Query
 from ... import deps
 from ....database import models
 from .......models.inbounds.easy_inbounds_builder import ProtocolsType
+from .......models.inbounds.inbounds import PrettyInbound
 
 from .......database import crud
 from .......database import schemas
@@ -13,7 +14,7 @@ router = APIRouter()
 
 
 @router.get(
-    "/", response_model=t.Optional[t.List[schemas.InboundsBase]],
+    "/", response_model=t.Optional[t.List[PrettyInbound]],
 )
 @deps.limiter.limit('1/minute', per_method=True)
 async def read_data(
@@ -37,7 +38,17 @@ async def read_data(
         protocol=protocol,
         tag=tag,
     )
-    return await crud.inbounds.get_multi_filter(filters=filters, skip=skip, limit=limit)
+    data = await crud.inbounds.get_multi_filter(filters=filters, skip=skip, limit=limit)
+
+    result = []
+    for item in data:
+        try:
+            pretty = PrettyInbound.from_orm(item)
+            result.append(pretty)
+        except Exception as e:
+            print(e)
+
+    return result
 
 # @router.put("/{data_id}", response_model=schemas.ReplacedOrder)
 # @deps.limiter.limit('1/minute', per_method=True)
