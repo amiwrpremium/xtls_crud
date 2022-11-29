@@ -10,9 +10,19 @@ class Client(BaseModel):
     alterId: Optional[int] = 0
 
 
+class PrettyClient(Client):
+    id: str
+    alterId: int
+
+
 class Setting(BaseModel):
     clients: List[Client]
     disableInsecureEncryption: Optional[bool] = False
+
+
+class PrettySetting(Setting):
+    clients: List[PrettyClient]
+    disableInsecureEncryption: bool
 
 
 if __name__ == '__main__':

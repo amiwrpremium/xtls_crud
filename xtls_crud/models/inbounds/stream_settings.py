@@ -1,15 +1,25 @@
-from typing import List, Optional, Dict, Union
+from typing import List, Optional, Dict
 from pydantic import BaseModel, FilePath, validator
 
 
 class Certificate(BaseModel):
-    certificateFile: Optional[Union[FilePath, str]] = "/root/cert.crt"
-    keyFile: Optional[Union[FilePath, str]] = "/root/private.key"
+    certificateFile: Optional[FilePath] = "/root/cert.crt"
+    keyFile: Optional[FilePath] = "/root/private.key"
+
+
+class PrettyCertificate(BaseModel):
+    certificateFile: str
+    keyFile: str
 
 
 class TlsSettings(BaseModel):
     serverName: str
     certificates: Optional[List[Certificate]] = [Certificate()]
+
+
+class PrettyTlsSettings(BaseModel):
+    serverName: str
+    certificates: List[PrettyCertificate]
 
 
 class WsSettings(BaseModel):
@@ -27,6 +37,13 @@ class StreamSettings(BaseModel):
     network: str
     security: str
     tlsSettings: TlsSettings
+    wsSettings: WsSettings
+
+
+class PrettyStreamSettings(BaseModel):
+    network: str
+    security: str
+    tlsSettings: PrettyTlsSettings
     wsSettings: WsSettings
 
 
