@@ -1,5 +1,13 @@
-from .python import inbound__get__python__sample, builders__post__python__sample
-from .js import inbound__get__js__sample, builders__post__js__sample
+from .python import (
+    inbound__get__python__sample,
+    inbound__post__python__sample,
+    builders__post__python__sample,
+)
+from .js import (
+    inbound__get__js__sample,
+    inbound__post__js__sample,
+    builders__post__js__sample,
+)
 from .models import XCodeSample
 
 inbound__get = XCodeSample(
@@ -8,6 +16,8 @@ inbound__get = XCodeSample(
     samples=[
         inbound__get__python__sample,
         inbound__get__js__sample,
+        inbound__post__python__sample,
+        inbound__post__js__sample,
     ]
 )
 
