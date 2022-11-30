@@ -22,6 +22,10 @@ for path in sorted(Path("xtls_crud").rglob("*.py")):
         continue
     if "web" in parts and "backend" in parts:
         continue
+    if "web" in parts[0]:
+        continue
+    if "core" in parts:
+        continue
 
     if parts[-1] == "__init__":
         parts = parts[:-1]
@@ -40,7 +44,6 @@ for path in sorted(Path("xtls_crud").rglob("*.py")):
         print("::: " + "xtls_crud." + identifier, file=fd)
 
     mkdocs_gen_files.set_edit_path(full_doc_path, path)
-
 
 with mkdocs_gen_files.open("reference/SUMMARY.md", "w") as nav_file:
     nav_file.writelines(nav.build_literate_nav())
