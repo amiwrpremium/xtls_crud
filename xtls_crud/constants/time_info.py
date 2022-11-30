@@ -1,7 +1,8 @@
 """
-Time Constants, Types and Enums for xtls_crud
+## Time Constants, Types and Enums for xtls_crud
 
 This module contains constants, types and enums for byte sizes.
+
 Like: 1d = 1 day | 1w = 1 week | 1mo = 1 month | 1y = 1 year
 """
 
@@ -22,46 +23,16 @@ class Time(BaseModel):
 
     @root_validator()
     def upper_case_name(cls, values):
-        """
-        Make sure the name is upper case
-
-        :param values: dict
-        :type values: dict
-
-        :return: dict
-        :rtype: dict
-        """
-
         values['name'] = values['name'].upper()
         return values
 
     @root_validator()
     def upper_case_symbol(cls, values):
-        """
-        Make sure the symbol is upper case
-
-        :param values: dict
-        :type values: dict
-
-        :return: dict
-        :rtype: dict
-        """
-
         values['symbol'] = values['symbol'].upper()
         return values
 
     @root_validator()
     def positive_seconds(cls, values):
-        """
-        Make sure the seconds are positive
-
-        :param values: dict
-        :type values: dict
-
-        :return: dict
-        :rtype: dict
-        """
-
         if values['seconds'] < 0:
             raise ValueError('seconds must be positive')
         return values
@@ -267,8 +238,8 @@ class TimeUnit(Enum):
         """
         Get the name of the time unit
 
-        :return: The name of the time unit
-        :rtype: str
+        Returns:
+            str: The name of the time unit
         """
 
         return self.value.name
@@ -278,8 +249,8 @@ class TimeUnit(Enum):
         """
         Get the symbol of the time unit
 
-        :return: The symbol of the time unit
-        :rtype: str
+        Returns:
+            str: The symbol of the time unit
         """
 
         return self.value.symbol
@@ -289,8 +260,8 @@ class TimeUnit(Enum):
         """
         Get the number of seconds in the time unit
 
-        :return: The number of seconds in the time unit
-        :rtype: int
+        Returns:
+            int: The number of seconds in the time unit
         """
 
         return self.value.seconds
@@ -300,8 +271,8 @@ class TimeUnit(Enum):
         """
         Get all the names of the time units
 
-        :return: All the names of the time units
-        :rtype: list[str]
+        Returns:
+            list[str]: All the names of the time units
         """
 
         return [unit.name for unit in cls]
@@ -311,8 +282,8 @@ class TimeUnit(Enum):
         """
         Get all the symbols of the time units
 
-        :return: All the symbols of the time units
-        :rtype: list[str]
+        Returns:
+            list[str]: All the symbols of the time units
         """
 
         return [unit.symbol for unit in cls]
@@ -322,8 +293,8 @@ class TimeUnit(Enum):
         """
         Get all the number of seconds in the time units
 
-        :return: All the number of seconds in the time units
-        :rtype: list[int]
+        Returns:
+            list[int]: All the number of seconds in the time units
         """
 
         return [unit.seconds for unit in cls]
@@ -333,8 +304,8 @@ class TimeUnit(Enum):
         """
         Map the symbols of the time units by their names
 
-        :return: A dictionary mapping the symbols of the time units by their names
-        :rtype: dict[str, str]
+        Returns:
+            dict[str, str]: A dictionary mapping the symbols of the time units by their names
         """
 
         return {name: symbol for name, symbol in zip(cls.all_names(), cls.all_symbols())}
@@ -344,8 +315,8 @@ class TimeUnit(Enum):
         """
         Map the names of the time units by their symbols
 
-        :return: A dictionary mapping the names of the time units by their symbols
-        :rtype: dict[str, str]
+        Returns:
+            dict[str, str]: A dictionary mapping the names of the time units by their symbols
         """
 
         return {symbol: name for name, symbol in zip(cls.all_names(), cls.all_symbols())}
@@ -355,8 +326,8 @@ class TimeUnit(Enum):
         """
         Map the number of seconds in the time units by their names
 
-        :return: A dictionary mapping the number of seconds in the time units by their names
-        :rtype: dict[str, int]
+        Returns:
+            dict[str, int]: A dictionary mapping the number of seconds in the time units by their names
         """
 
         return {name: seconds for name, seconds in zip(cls.all_names(), cls.all_seconds())}
@@ -366,8 +337,8 @@ class TimeUnit(Enum):
         """
         Map the number of seconds in the time units by their symbols
 
-        :return: A dictionary mapping the number of seconds in the time units by their symbols
-        :rtype: dict[str, int]
+        Returns:
+            dict[str, int]: A dictionary mapping the number of seconds in the time units by their symbols
         """
 
         return {symbol: seconds for symbol, seconds in zip(cls.all_symbols(), cls.all_seconds())}
@@ -377,13 +348,20 @@ def from_string(string: str) -> Time:
     """
     Create a time from a string
 
-    :param string: The string to create the time from
-    :type string: str
+    Args:
+        string (str): The string to create the time from
 
-    :return: The size (e.g. 1D)
-    :rtype: Size
+    Returns:
+        Time: The time
 
-    :raises ValueError: If the string is not a valid time
+    Raises:
+        ValueError: If the string is not a valid time
+        TypeError: If the string is not a string
+        KeyError: If the string is not a valid time unit
+
+    Examples:
+        >>> from_string('1s')
+        Time('S', 'SECOND', 1)
     """
 
     if not isinstance(string, str):

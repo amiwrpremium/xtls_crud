@@ -1,7 +1,8 @@
 """
-ByteSize Constants, Types and Enums for xtls_crud
+## ByteSize Constants, Types and Enums for xtls_crud
 
 This module contains constants, types and enums for byte sizes.
+
 Like: 1GB = 1 Gigabyte | 1TB = 1 Terabyte | 1PB = 1 Petabyte | 1EB = 1 Exabyte
 """
 
@@ -21,55 +22,25 @@ class Size(BaseModel):
 
     @root_validator()
     def upper_case_name(cls, values):
-        """
-        Upper case the name
-
-        :param values: values from the model
-        :type values: dict
-
-        :return: values
-        :rtype: dict
-        """
-
         values['name'] = values['name'].upper()
         return values
 
     @root_validator()
     def upper_case_symbol(cls, values):
-        """
-        Upper case the symbol
-
-        :param values: values from the model
-        :type values: dict
-
-        :return: values
-        :rtype: dict
-        """
-
         values['symbol'] = values['symbol'].upper()
         return values
 
     @root_validator()
     def positive_bytes(cls, values):
-        """
-        Validate that bytes is positive
-
-        :param values: values from the model
-        :type values: dict
-
-        :return: values
-        :rtype: dict
-        """
-
         if values['bytes'] < 0:
             raise ValueError('bytes must be positive')
         return values
 
     def __str__(self):
-        return f'{self.name} ({self.symbol})'
+        return f"Time('{self.name}', '{self.symbol}', {self.bytes})"
 
     def __repr__(self):
-        return f'{self.name} ({self.symbol})'
+        return f"Time('{self.name}', '{self.symbol}', {self.bytes})"
 
     def __eq__(self, other):
         if isinstance(other, Size):
@@ -266,8 +237,8 @@ class SizeUnit(Enum):
         """
         Get the name of the unit
 
-        :return: The name of the unit
-        :rtype: str
+        Returns:
+            str: The name of the unit
         """
 
         return self.value.name
@@ -277,8 +248,8 @@ class SizeUnit(Enum):
         """
         Get the symbol of the unit
 
-        :return: The symbol of the unit
-        :rtype: str
+        Returns:
+            str: The symbol of the unit
         """
 
         return self.value.symbol
@@ -288,8 +259,8 @@ class SizeUnit(Enum):
         """
         Get the number of bytes in the unit
 
-        :return: The number of bytes in the unit
-        :rtype: int
+        Returns:
+            int: The number of bytes in the unit
         """
 
         return self.value.bytes
@@ -299,8 +270,8 @@ class SizeUnit(Enum):
         """
         Get all the names of the units
 
-        :return: All the names of the units
-        :rtype: list[str]
+        Returns:
+            list[str]: All the names of the units
         """
 
         return [unit.name for unit in cls]
@@ -310,8 +281,8 @@ class SizeUnit(Enum):
         """
         Get all the symbols of the units
 
-        :return: All the symbols of the units
-        :rtype: list[str]
+        Returns:
+            list[str]: All the symbols of the units
         """
 
         return [unit.symbol for unit in cls]
@@ -321,8 +292,8 @@ class SizeUnit(Enum):
         """
         Get all the number of bytes in the units
 
-        :return: All the number of bytes in the units
-        :rtype: list[int]
+        Returns:
+            list[int]: All the number of bytes in the units
         """
 
         return [unit.bytes for unit in cls]
@@ -332,8 +303,8 @@ class SizeUnit(Enum):
         """
         Map the symbols of the units by their names
 
-        :return: A dictionary mapping the symbols of the units by their names
-        :rtype: dict[str, str]
+        Returns:
+            dict[str, str]: The symbols of the units mapped by their names
         """
 
         return {name: symbol for name, symbol in zip(cls.all_names(), cls.all_symbols())}
@@ -343,8 +314,8 @@ class SizeUnit(Enum):
         """
         Map the names of the units by their symbols
 
-        :return: A dictionary mapping the names of the units by their symbols
-        :rtype: dict[str, str]
+        Returns:
+            dict[str, str]: The names of the units mapped by their symbols
         """
 
         return {symbol: name for name, symbol in zip(cls.all_names(), cls.all_symbols())}
@@ -354,8 +325,8 @@ class SizeUnit(Enum):
         """
         Map the number of bytes in the units by their names
 
-        :return: A dictionary mapping the number of bytes in the units by their names
-        :rtype: dict[str, int]
+        Returns:
+            dict[str, int]: The number of bytes in the units mapped by their names
         """
 
         return {name: bytes for name, bytes in zip(cls.all_names(), cls.all_bytes())}  # noqa
@@ -365,8 +336,8 @@ class SizeUnit(Enum):
         """
         Map the number of bytes in the units by their symbols
 
-        :return: A dictionary mapping the number of bytes in the units by their symbols
-        :rtype: dict[str, int]
+        Returns:
+            dict[str, int]: The number of bytes in the units mapped by their symbols
         """
 
         return {symbol: bytes for symbol, bytes in zip(cls.all_symbols(), cls.all_bytes())}  # noqa
@@ -376,13 +347,21 @@ def from_string(string: str) -> Size:
     """
     Create a size from a string
 
-    :param string: The string to create the size from
-    :type string: str
+    Args:
+        string (str): The string to create the size from
 
-    :return: The size (e.g. 100 MB)
-    :rtype: Size
+    Returns:
+        Size: The size (e.g. 100 MB)
 
-    :raises ValueError: If the string is not a valid size
+    Raises:
+        ValueError: If the string is not a valid size
+        TypeError: If the string is not a string
+        KeyError: If the string is not a valid size unit
+
+    Examples:
+        >>> from_string('100 MB')
+        MB (MEGABYTE)
+
     """
 
     if not isinstance(string, str):
