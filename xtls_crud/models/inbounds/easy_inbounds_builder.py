@@ -13,8 +13,6 @@ from string import ascii_letters
 from ...utils.builders.inbounds_builder import (
     _ExpiryTime,  # noqa
     _ByteSize,  # noqa
-    _convert_size,  # noqa
-    _convert_expiry_time,  # noqa
     time_info,
     byte_size,
 )
