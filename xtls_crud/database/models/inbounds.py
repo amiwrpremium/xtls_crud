@@ -4,6 +4,10 @@ from ..db.base_class import Base
 
 
 class Inbounds(Base):
+    """
+    Inbounds table model
+    """
+
     __name__ = 'inbounds'
 
     id = Column(
