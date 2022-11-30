@@ -27,6 +27,11 @@ for path in sorted(Path("xtls_crud").rglob("*.py")):
     if "core" in parts:
         continue
 
+    if "commands" in parts and "web" in parts:
+        continue
+    if "commands" in parts and "main" in parts:
+        continue
+
     if parts[-1] == "__init__":
         parts = parts[:-1]
         doc_path = doc_path.with_name("index.md")
