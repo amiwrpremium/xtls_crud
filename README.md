@@ -13,15 +13,33 @@ XTLS CRUD is a CRUD App for [XTLS Xray-core](https://github.com/XTLS/Xray-core) 
 - Helpers for time allocation for each inbound
 
 ## Installation
-Using Poetry:
+
+### Using Poetry:
+Install
 ```bash
 poetry install
 ```
 
-
-## build
+build
 ```bash
 poetry build
+```
+
+## Documentation
+### Online
+See [docs](https://amiwrpremium.github.io/xtls_crud/).
+
+### Local
+You can also clone the repo and build the docs locally using [MkDocs](https://www.mkdocs.org/).
+
+#### Serve docs locally
+```bash
+mkdocs serve 
+```
+
+#### Build docs
+```bash
+mkdocs build
 ```
 
 ## Usage
