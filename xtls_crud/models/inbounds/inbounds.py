@@ -9,6 +9,30 @@ from .sniffing import Sniffing
 
 
 class PrettyInbound(BaseModel):
+    """
+    Pretty inbound schema (use to get pretty json response when retrieving from API)
+
+    Keyword Args:
+        user_id (int): user id
+        up (int): up
+        down (int): down
+        total (int): total
+        remark (str): remark
+        enable (bool): enable
+        expiry_time (int): expiry time
+        listen (str): listen
+        port (int): port
+        protocol (str): protocol
+        settings (str): settings
+        stream_settings (str): stream settings
+        tag (str): tag
+        sniffing (str): sniffing
+        id (int): id
+
+    Returns:
+        PrettyInbound (PrettyInbound): Pretty inbound schema
+    """
+
     user_id: int
     up: int
     down: int
