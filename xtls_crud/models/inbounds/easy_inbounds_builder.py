@@ -1,3 +1,9 @@
+"""
+# Models for Inbounds Builder
+Make it easy to build inbounds
+
+"""
+
 import typing as t
 from uuid import uuid4
 from pydantic import BaseModel, UUID4, UUID1, Field, HttpUrl
@@ -27,6 +33,29 @@ def _random_path(length: int) -> str:
 
 
 class EasyBuilderSchemaCreate(BaseModel):
+    """
+    Easy builder schema create
+
+    Keyword Args:
+        user_id (int): User ID
+        up (int): Upload (Byte)
+        down (int): Download (Byte)
+        total (int): Total
+        remark (str): Remark
+        enable (bool): Enable
+        expiry_time (int): Expiry Time (MILLISECONDS)
+        listen (str): Listen
+        port (int): Port
+        protocol (str): Protocol
+        uuid (str): UUID
+        network (str): Network
+        security (str): Security
+        server_name (str): Server Name
+        ws_path (str): WebSocket Path
+        tag (int): Tag
+        sniffing (bool): Sniffing
+    """
+
     user_id: t.Optional[int] = 1
     up: t.Optional[_ByteSize] = Field(
         100 * byte_size.GIGABYTE.bytes, title="Upload", gt=0, multiple_of=1,
@@ -122,3 +151,26 @@ class EasyBuilderSchemaUpdate(BaseModel):
         example=1, description="Tag")
     sniffing: t.Optional[bool] = Field(
         None, title="Sniffing", example=True, description="Sniffing")
+
+    """
+    Easy builder schema update
+    
+    Keyword Args:
+        user_id (int): User ID (Default: None)
+        up (int): Upload (Byte) (Default: None)
+        down (int): Download (Byte) (Default: None)
+        total (int): Total (Default: None)
+        remark (str): Name of this setting (Default: None)
+        enable (bool): Enable this setting (Default: None)
+        expiry_time (int): Expiry Time (MILLISECONDS) (Default: None)
+        listen (str): Listen (Default: None)
+        port (int): Port to bind (Default: None)
+        protocol (str): Protocol (Default: None)
+        uuid (str): UUID (Default: None)
+        network (str): Network (Default: None)
+        security (str): Security (Default: None)
+        server_name (str): Server Name (Default: None)
+        ws_path (str): WebSocket Path (Default: None)
+        tag (int): Tag (Default: None)
+        sniffing (bool): Sniffing (Default: None)
+    """
