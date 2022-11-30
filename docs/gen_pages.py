@@ -34,6 +34,8 @@ for path in sorted(Path("xtls_crud").rglob("*.py")):
 
     if "crud" in parts and "base" in parts:
         continue
+    if "db" in parts and "database" in parts:
+        continue
 
     if parts[-1] == "__init__":
         parts = parts[:-1]
