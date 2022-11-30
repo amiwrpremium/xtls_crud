@@ -54,6 +54,9 @@ class EasyBuilderSchemaCreate(BaseModel):
         ws_path (str): WebSocket Path
         tag (int): Tag
         sniffing (bool): Sniffing
+
+    Returns:
+        EasyBuilderSchemaCreate (EasyBuilderSchemaCreate): Easy builder schema create
     """
 
     user_id: t.Optional[int] = 1
@@ -105,6 +108,32 @@ class EasyBuilderSchemaCreate(BaseModel):
 
 
 class EasyBuilderSchemaUpdate(BaseModel):
+    """
+    Easy builder schema update
+
+    Keyword Args:
+        user_id (int): User ID (Default: None)
+        up (int): Upload (Byte) (Default: None)
+        down (int): Download (Byte) (Default: None)
+        total (int): Total (Default: None)
+        remark (str): Name of this setting (Default: None)
+        enable (bool): Enable this setting (Default: None)
+        expiry_time (int): Expiry Time (MILLISECONDS) (Default: None)
+        listen (str): Listen (Default: None)
+        port (int): Port to bind (Default: None)
+        protocol (str): Protocol (Default: None)
+        uuid (str): UUID (Default: None)
+        network (str): Network (Default: None)
+        security (str): Security (Default: None)
+        server_name (str): Server Name (Default: None)
+        ws_path (str): WebSocket Path (Default: None)
+        tag (int): Tag (Default: None)
+        sniffing (bool): Sniffing (Default: None)
+
+    Returns:
+        EasyBuilderSchemaUpdate (EasyBuilderSchemaUpdate): Easy builder schema update
+    """
+
     user_id: t.Optional[int] = 1
     up: t.Optional[_ByteSize] = Field(
         None, title="Upload", gt=0, multiple_of=1,
@@ -151,26 +180,3 @@ class EasyBuilderSchemaUpdate(BaseModel):
         example=1, description="Tag")
     sniffing: t.Optional[bool] = Field(
         None, title="Sniffing", example=True, description="Sniffing")
-
-    """
-    Easy builder schema update
-    
-    Keyword Args:
-        user_id (int): User ID (Default: None)
-        up (int): Upload (Byte) (Default: None)
-        down (int): Download (Byte) (Default: None)
-        total (int): Total (Default: None)
-        remark (str): Name of this setting (Default: None)
-        enable (bool): Enable this setting (Default: None)
-        expiry_time (int): Expiry Time (MILLISECONDS) (Default: None)
-        listen (str): Listen (Default: None)
-        port (int): Port to bind (Default: None)
-        protocol (str): Protocol (Default: None)
-        uuid (str): UUID (Default: None)
-        network (str): Network (Default: None)
-        security (str): Security (Default: None)
-        server_name (str): Server Name (Default: None)
-        ws_path (str): WebSocket Path (Default: None)
-        tag (int): Tag (Default: None)
-        sniffing (bool): Sniffing (Default: None)
-    """
